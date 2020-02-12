@@ -35,20 +35,20 @@ in {
 
     type = mkOption {
       description = "System Type";
-      type = types.string;
+      type = types.str;
     };
 
     partition = mkOption {
       description = "Partitioning commands";
-      type = types.string;
+      type = types.str;
     };
     format = mkOption {
       description = "Formatting commands";
-      type = types.string;
+      type = types.str;
     };
     mount = mkOption {
       description = "Mounting commands";
-      type = types.string;
+      type = types.str;
     };
   };
 
