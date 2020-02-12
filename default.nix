@@ -115,6 +115,9 @@ let
       t # change type
       1 # partition 1
       ef # Type EFI
+      t # change type
+      2 # partition 2
+      82 # Type Linux Swap
       p # print the in-memory partition table
       w # write the partition table
     EOF
@@ -134,8 +137,8 @@ let
         # default start
         # default, extend partition to end of disk
       t # change type
-      2 # Partition #2
-      ef # Type EFI
+      1 # Partition #1
+      82 # Type Linux Swap
       p # print the in-memory partition table
       w # write the partition table
     EOF
