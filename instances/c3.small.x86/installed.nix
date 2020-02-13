@@ -12,27 +12,28 @@
         '';
 
       };
-      efi = {
-        efiSysMountPoint = "/boot/efi";
-        canTouchEfiVariables = true;
-      };
+      efi.canTouchEfiVariables = true;
     };
   };
 
   fileSystems = {
     "/" = {
-      label = "nixos";
-      fsType = "ext4";
+      device = "rpool/safe/root";
+      fsType = "zfs";
     };
-    "/boot/efi" = {
+    "/boot" = {
       device = "/dev/sda1";
       fsType = "vfat";
     };
+    "/home" = {
+      device = "rpool/safe/home";
+      fsType = "zfs";
+    };
+    "/nix" = {
+      device = "rpool/local/nix";
+      fsType = "zfs";
+    };
   };
 
-  swapDevices = [
-    {
-      label = "swap";
-    }
-  ];
+  swapDevices = [ ];
 }

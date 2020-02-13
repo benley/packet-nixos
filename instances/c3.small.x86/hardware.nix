@@ -19,6 +19,9 @@
   };
 
   boot.loader.efi.canTouchEfiVariables = true;
+  boot.loader.efi.efiSysMountPoint = "/boot";
+
+  boot.supportedFilesystems = [ "zfs" ];
 
   boot.initrd.availableKernelModules = [ "xhci_pci" "ahci" "usbhid" "sd_mod" ];
   boot.kernelModules = [ "kvm_intel" ];
