@@ -619,4 +619,53 @@ in rec {
       mount /dev/sda1 /mnt/boot
     '';
   };
+
+  c3-medium-x86 = mkPXEInstaller {
+    name = "c3.medium.x86";
+    system = "x86_64-linux";
+    img = "bzImage";
+    kexec = true;
+
+    configFiles = [
+      ./instances/standard.nix
+      ./instances/c3.medium.x86/hardware.nix
+    ];
+
+    runTimeConfigFiles = [
+      ./instances/c3.medium.x86/installed.nix
+    ];
+
+    partition = lib.concatStringsSep "\n" [
+      (partitionBootableZFS "/dev/sda")
+      (partitionBootableZFS "/dev/sdb")
+      (partitionBootableZFS "/dev/sdc")
+      (partitionBootableZFS "/dev/sdd")
+    ];
+
+    format = ''
+      mkfs.vfat /dev/sda1
+      zpool create -O xattr=sa \
+                   -O acltype=posixacl \
+                   -O compression=lz4 \
+                   -O mountpoint=none \
+                   -f \
+                   rpool \
+                   mirror /dev/sda2 /dev/sdb2 \
+                   mirror /dev/sdc2 /dev/sdd2
+      zfs create rpool/local
+      zfs create rpool/safe
+      zfs create -o mountpoint=legacy rpool/safe/root
+      zfs create -o mountpoint=legacy rpool/safe/home
+      zfs create -o mountpoint=legacy -o atime=off rpool/local/nix
+    '';
+
+    mount = ''
+      mkdir -p /mnt
+      mount -t zfs rpool/safe/root /mnt
+      mkdir -p /mnt/home /mnt/nix /mnt/boot
+      mount -t zfs rpool/safe/home /mnt/home
+      mount -t zfs rpool/local/nix /mnt/nix
+      mount /dev/sda1 /mnt/boot
+    '';
+  };
 }
