@@ -8,8 +8,8 @@
 
   boot.loader.grub = {
     version = 2;
-    efiSupport = true;
-    device = "nodev";
+    # efiSupport = true;
+    devices = ["/dev/sda" "/dev/sdb"];
 
     extraConfig = ''
       serial --unit=1 --speed=115200 --word=8 --parity=no --stop=1
@@ -18,8 +18,8 @@
     '';
   };
 
-  boot.loader.efi.canTouchEfiVariables = true;
-  boot.loader.efi.efiSysMountPoint = "/boot";
+  # boot.loader.efi.canTouchEfiVariables = true;
+  # boot.loader.efi.efiSysMountPoint = "/boot";
 
   boot.supportedFilesystems = [ "zfs" ];
 

@@ -12,7 +12,7 @@
         '';
 
       };
-      efi.canTouchEfiVariables = true;
+      # efi.canTouchEfiVariables = true;
     };
   };
 
