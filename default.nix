@@ -390,18 +390,38 @@ in rec {
       ./instances/m1.xlarge.x86/installed.nix
     ];
 
-    partition = ''
-      ${partitionLinuxWithBootSwap "/dev/sda"}
-    '';
+    partition = lib.concatStringsSep "\n" [
+      (partitionBootableZFS "/dev/sda")
+      (partitionBootableZFS "/dev/sdb")
+      (partitionBootableZFS "/dev/sdc")
+      (partitionBootableZFS "/dev/sdd")
+      (partitionBootableZFS "/dev/sde")
+      (partitionBootableZFS "/dev/sdf")
+    ];
 
     format = ''
-      mkswap -L swap /dev/sda2
-      mkfs.ext4 -L nixos /dev/sda3
+      mkfs.vfat /dev/sda1
+      zpool create -O xattr=sa \
+                   -O acltype=posixacl \
+                   -O compression=lz4 \
+                   -O mountpoint=none \
+                   -f \
+                   rpool raidz /dev/sda2 /dev/sdb2 /dev/sdc2 /dev/sdd2 /dev/sde2 /dev/sdf2
+      zfs create -o com.sun:auto-snapshot = false rpool/local
+      zfs create rpool/safe
+      zfs create -o mountpoint=legacy rpool/safe/root
+      zfs create -o mountpoint=legacy rpool/safe/home
+      zfs create -o mountpoint=legacy -o atime=off rpool/local/nix
+      zfs create -o refreservation=1G -o mountpoint=none rroot/local/reserved
     '';
 
     mount = ''
-      swapon -L swap
-      mount -L nixos /mnt
+      mkdir -p /mnt
+      mount -t zfs rpool/safe/root /mnt
+      mkdir -p /mnt/home /mnt/nix /mnt/boot
+      mount -t zfs rpool/safe/home /mnt/home
+      mount -t zfs rpool/local/nix /mnt/nix
+      mount /dev/sda1 /mnt/boot
     '';
   };
 
