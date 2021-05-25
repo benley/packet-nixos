@@ -61,3 +61,8 @@ export BUILD_HOST_ARM_PRIVATE_KEY=
  - `BUILD_HOST_ARM_IP` and `BUILD_HOST_ARM_PRIVATE_KEY` is an aarch64
    builder ready to go, and the private key is already setup on the
    target for remote Nix builds.
+
+
+Example iPXE build:
+  nix-build -o /data/www/m1.xlarge.x86 -A m1-large-x86
+  

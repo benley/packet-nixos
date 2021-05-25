@@ -405,10 +405,12 @@ in rec {
                    -O acltype=posixacl \
                    -O compression=lz4 \
                    -O mountpoint=none \
+		   -o autotrim=on \
+		   -o ashift=12
                    -f \
                    rpool raidz /dev/sda2 /dev/sdb2 /dev/sdc2 /dev/sdd2 /dev/sde2 /dev/sdf2
       zfs create -o com.sun:auto-snapshot = false rpool/local
-      zfs create rpool/safe
+      zfs create -o com.sun:auto-snapshot=true rpool/safe
       zfs create -o mountpoint=legacy rpool/safe/root
       zfs create -o mountpoint=legacy rpool/safe/home
       zfs create -o mountpoint=legacy -o atime=off rpool/local/nix

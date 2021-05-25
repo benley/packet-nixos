@@ -19,7 +19,7 @@
   ];
 
   boot.kernelModules = [ "kvm_intel" ];
-  boot.kernelParams =  [ "console=ttyS1,115200n8" ];
+  boot.kernelParams =  [ "console=ttyS1,115200n8" "elevator=none" ];
   boot.extraModulePackages = [ ];
 
   hardware.enableAllFirmware = true;
