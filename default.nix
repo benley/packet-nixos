@@ -401,20 +401,25 @@ in rec {
 
     format = ''
       mkfs.vfat /dev/sda1
+      mkfs.vfat /dev/sdb1
+      mkfs.vfat /dev/sdc1
+      mkfs.vfat /dev/sdd1
+      mkfs.vfat /dev/sde1
+      mkfs.vfat /dev/sdf1
       zpool create -O xattr=sa \
                    -O acltype=posixacl \
                    -O compression=lz4 \
                    -O mountpoint=none \
 		   -o autotrim=on \
-		   -o ashift=12
+		   -o ashift=12 \
                    -f \
                    rpool raidz /dev/sda2 /dev/sdb2 /dev/sdc2 /dev/sdd2 /dev/sde2 /dev/sdf2
-      zfs create -o com.sun:auto-snapshot = false rpool/local
+      zfs create -o com.sun:auto-snapshot=false rpool/local
       zfs create -o com.sun:auto-snapshot=true rpool/safe
       zfs create -o mountpoint=legacy rpool/safe/root
       zfs create -o mountpoint=legacy rpool/safe/home
       zfs create -o mountpoint=legacy -o atime=off rpool/local/nix
-      zfs create -o refreservation=1G -o mountpoint=none rroot/local/reserved
+      zfs create -o refreservation=1G -o mountpoint=none rpool/local/reserved
     '';
 
     mount = ''

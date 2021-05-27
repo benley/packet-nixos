@@ -64,5 +64,5 @@ export BUILD_HOST_ARM_PRIVATE_KEY=
 
 
 Example iPXE build:
-  nix-build -o /data/www/m1.xlarge.x86 -A m1-large-x86
+  nix-build -o /data/www/m1.xlarge.x86 -A m1-xlarge-x86
   
